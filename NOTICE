@@ -1,0 +1,4 @@
+The initial MCP permission and OAuth implementation was extracted from work
+alongside distream (https://github.com/virtualCrypto-discord/distream) and adapted
+into this standalone, text-only service. The original MIT notice is preserved
+in LICENSE. No recordings, credentials or deployment state are distributed.

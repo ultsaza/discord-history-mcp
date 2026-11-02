@@ -1,0 +1,50 @@
+name: discord-history-mcp
+
+services:
+  mcp:
+    image: discord-history-mcp:local
+    build: .
+    restart: unless-stopped
+    init: true
+    ports:
+      - "127.0.0.1:19230:19230"
+    volumes:
+      - ./config.docker.json:/config/config.json:ro
+      - state:/state
+      - bot-secret:/run/discord-secrets:ro
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    tmpfs: ["/tmp:size=16m,mode=1777"]
+    pids_limit: 128
+    mem_limit: 384m
+    cpus: 1.0
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  provision-token:
+    profiles: [setup]
+    image: discord-history-mcp:local
+    entrypoint: ["/usr/local/bin/python", "-c"]
+    command:
+      - |
+        import os, pathlib, sys
+        os.umask(0o077)
+        token = sys.stdin.read().strip()
+        if not token:
+            raise SystemExit("Provide the bot token on standard input")
+        pathlib.Path('/run/discord-secrets/bot-token').write_text(token)
+    volumes:
+      - bot-secret:/run/discord-secrets
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    network_mode: none
+    pids_limit: 16
+    mem_limit: 64m
+
+volumes:
+  state:
+  bot-secret:

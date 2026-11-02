@@ -1,0 +1,13 @@
+{
+  "base_url": "https://discord-history.example.com",
+  "allowed_guild_ids": [
+    "123456789012345678"
+  ],
+  "allowed_redirect_uris": [
+    "https://chatgpt.com/connector_platform_oauth_redirect",
+    "https://claude.ai/api/mcp/auth_callback"
+  ],
+  "bot_token_file": "/run/discord-secrets/bot-token",
+  "state_dir": "/state",
+  "port": 19230
+}
